@@ -1,0 +1,6 @@
+{
+  "name": "JungleMind",
+  "description": "The thinking engine shaped for what counts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

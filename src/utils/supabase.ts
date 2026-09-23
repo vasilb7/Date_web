@@ -37,8 +37,7 @@ export async function saveDateResponse(payload: DateResponsePayload) {
           custom_note: payload.custom_note || null,
           status: payload.status || 'accepted',
         },
-      ])
-      .select();
+      ]);
 
     if (error) {
       console.error('Error saving date response to Supabase:', error);

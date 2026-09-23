@@ -83,12 +83,4 @@ $(function () {
         }
     };
 
-
-    // Aos
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            once: true,
-        });
-    }
-
 });

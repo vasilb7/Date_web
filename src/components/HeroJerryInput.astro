@@ -1,0 +1,363 @@
+---
+// HeroJerryInput component with Jerry pointing image and name validation logic
+---
+
+<div class="hero-jerry-container">
+  <!-- Jerry pointing down into the input field -->
+  <div class="hero-jerry-avatar">
+    <img
+      src="/img/name_log/jerry_pointing.png"
+      alt="Jerry pointing"
+      loading="eager"
+    />
+  </div>
+
+  <!-- Form state -->
+  <form id="heroNameForm" class="hero-name-form" novalidate>
+    <div id="heroNameCard" class="hero-name-card">
+      <div class="hero-input-group">
+        <input
+          type="text"
+          id="heroNameInput"
+          name="name"
+          class="hero-name-input"
+          placeholder="Име"
+          autocomplete="off"
+          required
+        />
+        <button
+          type="submit"
+          id="heroSubmitBtn"
+          class="search-arrow-btn"
+          aria-label="Продължи"
+        >
+          <iconify-icon icon="lucide:arrow-right" class="fs-5"></iconify-icon>
+        </button>
+      </div>
+    </div>
+    <div id="heroNameError" class="hero-name-error" aria-live="polite"></div>
+  </form>
+
+  <!-- Success state greeting -->
+  <div id="heroSuccessCard" class="hero-name-success">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <span class="round-40 rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center flex-shrink-0">
+          <iconify-icon icon="lucide:heart" class="fs-5 text-danger"></iconify-icon>
+        </span>
+        <div>
+          <h5 class="mb-0 text-dark fw-bold" id="heroGreetingTitle">Здравей, Дария! ❤️</h5>
+          <p class="mb-0 fs-3 text-muted">Добре дошла! Всичко е готово за теб.</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="heroResetBtn"
+        class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fs-2"
+        title="Смени име"
+      >
+        Промени
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .hero-jerry-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 80px auto 0;
+  }
+
+  @media (min-width: 1200px) {
+    .hero-jerry-container {
+      margin: 80px 0 0 auto;
+    }
+  }
+
+  .hero-jerry-avatar {
+    position: absolute;
+    top: -95px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 136px;
+    height: 136px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hero-jerry-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+    border: none;
+  }
+
+  .hero-name-form {
+    width: 100%;
+    position: relative;
+  }
+
+  .hero-name-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.35);
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .hero-name-card:focus-within {
+    border-color: #141414;
+    background: #ffffff;
+    box-shadow: 0 18px 36px -4px rgba(0, 0, 0, 0.45);
+  }
+
+  .hero-name-card.has-error {
+    border-color: #ba1a1a !important;
+  }
+
+  .hero-input-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 50px;
+  }
+
+  .hero-name-input {
+    flex: 1 1 auto;
+    height: 100%;
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    font-size: 16px;
+    font-family: inherit;
+    font-weight: 500;
+    color: #141414;
+    padding: 0 16px;
+  }
+
+  .hero-name-input::placeholder {
+    color: #666666;
+    font-weight: 400;
+  }
+
+  .search-arrow-btn {
+    height: 40px;
+    width: 44px;
+    border-radius: 10px;
+    background: #141414;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+    margin-right: 2px;
+  }
+
+  .search-arrow-btn:hover {
+    background: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.3);
+  }
+
+  .search-arrow-btn:active {
+    transform: scale(0.92) translateY(1px);
+    background: #262626;
+  }
+
+  .hero-name-error {
+    color: #ba1a1a;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px 0;
+    display: none;
+    line-height: 18px;
+    animation: mat-subscript-enter 0.2s cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .hero-name-card.has-error + .hero-name-error {
+    display: block;
+  }
+
+  .hero-name-success {
+    display: none;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 14px;
+    padding: 14px 18px;
+    box-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.35);
+    border: 1.5px solid #28a745;
+    animation: mat-subscript-enter 0.3s ease-out;
+  }
+
+  .round-40 {
+    width: 40px;
+    height: 40px;
+  }
+
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    20%, 60% {
+      transform: translateX(-6px);
+    }
+    40%, 80% {
+      transform: translateX(6px);
+    }
+  }
+
+  .animate-shake {
+    animation: shake 0.4s ease-in-out;
+  }
+
+  @keyframes mat-subscript-enter {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script is:inline>
+  function setupHeroNameLogic() {
+    const form = document.getElementById('heroNameForm');
+    const input = document.getElementById('heroNameInput');
+    const card = document.getElementById('heroNameCard');
+    const errorEl = document.getElementById('heroNameError');
+    const successCard = document.getElementById('heroSuccessCard');
+    const greetingTitle = document.getElementById('heroGreetingTitle');
+    const resetBtn = document.getElementById('heroResetBtn');
+
+    if (!form || !input || !card || !errorEl || !successCard) return;
+
+    const NAME_ERROR_MESSAGE = 'Опа,май обърка нещо? - пробвай пак.';
+    const EMPTY_ERROR_MESSAGE = 'Полето е задължително';
+
+    function isAllowedName(val) {
+      if (!val) return false;
+      const clean = val.trim().toLowerCase().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '');
+      const validSet = new Set([
+        'дария',
+        'даря',
+        'дари',
+        'дарийка',
+        'дариика',
+        'дариа',
+        'daria',
+        'dariya',
+        'darya',
+        'daryia',
+        'dariq',
+        'dari',
+        'dariika',
+        'dariah',
+        'darriah',
+      ]);
+      if (validSet.has(clean)) return true;
+      if (/^дар(и|ия|я|ийка|иика|иа)$/i.test(clean)) return true;
+      if (/^dar(i|ia|iya|ya|yia|iq|ika|iika|iah)$/i.test(clean)) return true;
+      return false;
+    }
+
+    function triggerShake() {
+      form.classList.remove('animate-shake');
+      // trigger reflow
+      void form.offsetWidth;
+      form.classList.add('animate-shake');
+    }
+
+    function showError(msg) {
+      card.classList.add('has-error');
+      errorEl.textContent = msg;
+      triggerShake();
+    }
+
+    function clearError() {
+      card.classList.remove('has-error');
+      errorEl.textContent = '';
+    }
+
+    function showSuccess(nameVal) {
+      clearError();
+      const formatted = nameVal.trim().charAt(0).toUpperCase() + nameVal.trim().slice(1);
+      greetingTitle.textContent = 'Здравей, ' + formatted + '! ❤️';
+      form.style.display = 'none';
+      successCard.style.display = 'block';
+    }
+
+    // Check URL parameters for preset name (?to=... or ?name=...)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlName = (params.get('to') || params.get('name') || '').trim();
+      if (urlName) {
+        input.value = urlName;
+        if (isAllowedName(urlName)) {
+          showSuccess(urlName);
+        }
+      }
+    } catch (e) {
+      // Ignore URL parsing errors
+    }
+
+    input.addEventListener('input', function () {
+      clearError();
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const trimmed = input.value.trim();
+
+      if (!trimmed) {
+        showError(EMPTY_ERROR_MESSAGE);
+        input.focus();
+        return;
+      }
+
+      if (!isAllowedName(trimmed)) {
+        showError(NAME_ERROR_MESSAGE);
+        input.focus();
+        return;
+      }
+
+      showSuccess(trimmed);
+    });
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        successCard.style.display = 'none';
+        form.style.display = 'block';
+        input.value = '';
+        clearError();
+        input.focus();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeroNameLogic);
+  } else {
+    setupHeroNameLogic();
+  }
+</script>

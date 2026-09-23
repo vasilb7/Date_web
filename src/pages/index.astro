@@ -4,7 +4,7 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
 ---
 
 <Layout
-  title="Studiova - Creative Agency & Portfolio"
+  title="JMB - Специална покана за среща"
   activePage="home"
   
 >
@@ -12,34 +12,14 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
   <div class="page-wrapper overflow-hidden">
 
     <!--  Banner Section -->
-    <section class="banner-section position-relative d-flex align-items-end min-vh-100">
+    <section class="banner-section position-relative d-flex align-items-center justify-content-center min-vh-100 overflow-hidden">
       <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline>
         <source src="/assets/images/backgrounds/banner-video.mp4" type="video/mp4" />
       </video>
-      <div class="container">
-        <div class="d-flex flex-column gap-4 pb-8 position-relative z-1">
-          <div class="row align-items-end justify-content-between g-4">
-            <div class="col-lg-6 col-xl-5">
-              <div class="d-flex align-items-center gap-4">
-                <img src="/assets/images/svgs/primary-leaf.svg" alt="" class="img-fluid animate-spin">
-                <p class="mb-0 text-white fs-5 text-opacity-70">We create <span
-                    class="text-primary">high-performing</span> digital designs that elevate brands and enhance
-                  conversions.</p>
-              </div>
-            </div>
-            <div class="col-lg-6 col-xl-5">
-              <HeroJerryInput />
-            </div>
-          </div>
-          <div class="d-flex align-items-end gap-3">
-            <h1 class="mb-0 fs-16 text-white lh-1">Studiova</h1>
-            <a href="javascript:void(0)" class="p-1 ps-7 bg-primary rounded-pill">
-              <span class="bg-white round-52 rounded-circle d-flex align-items-center justify-content-center">
-                <iconify-icon icon="lucide:arrow-up-right" class="fs-8 text-dark"></iconify-icon>
-              </span>
-            </a>
-          </div>
-        </div>
+      <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-35 pointer-events-none"></div>
+
+      <div class="container position-relative z-1 d-flex flex-column align-items-center justify-content-center text-center py-5">
+        <HeroJerryInput />
       </div>
     </section>
 
@@ -52,7 +32,7 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
               <span
                 class="round-36 flex-shrink-0 text-dark rounded-circle bg-primary hstack justify-content-center fw-medium">01</span>
               <hr class="border-line">
-              <span class="badge text-bg-dark">Stats & facts</span>
+              <span class="badge text-bg-dark">JMB Покана</span>
             </div>
           </div>
           <div class="col-xl-8 col-xxl-7">
@@ -60,9 +40,8 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
               <div class="row">
                 <div class="col-xxl-8">
                   <div class="d-flex flex-column gap-6">
-                    <h2 class="mb-0">High quality web design solutions you can trust.</h2>
-                    <p class="fs-5 mb-0">When selecting a web design agency, it's essential to consider its reputation,
-                      experience, and the specific needs of your project.</p>
+                    <h2 class="mb-0">Специален момент, създаден само за теб.</h2>
+                    <p class="fs-5 mb-0">Защото най-хубавите моменти заслужават специално внимание, уютна атмосфера и незабравими спомени заедно.</p>
                   </div>
                 </div>
               </div>
@@ -70,24 +49,24 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
                 <div class="col-md-6 col-lg-4 mb-7 mb-lg-0">
                   <div class="d-flex flex-column gap-6 pt-9 border-top">
                     <h2 class="mb-0 fs-14"><span class="count" data-target="40">40</span>K+</h2>
-                    <p class="mb-0">People who have launched their websites</p>
+                    <p class="mb-0">Внимание към всеки детайл</p>
                   </div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-7 mb-lg-0">
                   <div class="d-flex flex-column gap-6 pt-9 border-top">
                     <h2 class="mb-0 fs-14"><span class="count" data-target="238">238</span>+</h2>
-                    <p class="mb-0">Experienced professionals ready to assist</p>
+                    <p class="mb-0">Идеи за перфектна среща</p>
                   </div>
                 </div>
                 <div class="col-md-6 col-lg-4 mb-7 mb-lg-0">
                   <div class="d-flex flex-column gap-6 pt-9 border-top">
                     <h2 class="mb-0 fs-14"><span class="count" data-target="3">3</span>M+</h2>
-                    <p class="mb-0">Support through messages and live consultations</p>
+                    <p class="mb-0">Споделени усмивки и емоции</p>
                   </div>
                 </div>
               </div>
-              <a href="/about-us" class="btn">
-                <span class="btn-text">Who we are</span>
+              <a href="#plans" class="btn">
+                <span class="btn-text">Виж идеите за среща</span>
                 <iconify-icon icon="lucide:arrow-up-right"
                   class="btn-icon bg-white text-dark round-52 rounded-circle hstack justify-content-center fs-7 shadow-sm"></iconify-icon>
               </a>
@@ -101,7 +80,7 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
     </section>
 
     <!--  Featured Projects Section -->
-    <section class="featured-projects py-5 py-lg-11 py-xl-12 bg-light-gray">
+    <section class="featured-projects py-5 py-lg-11 py-xl-12 bg-light-gray" id="plans">
       <div class="d-flex flex-column gap-5 gap-xl-11">
         <div class="container">
           <div class="row gap-7 gap-xl-0">
@@ -110,16 +89,15 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
                 <span
                   class="round-36 flex-shrink-0 text-dark rounded-circle bg-primary hstack justify-content-center fw-medium">02</span>
                 <hr class="border-line">
-                <span class="badge text-bg-dark">Portfolio</span>
+                <span class="badge text-bg-dark">Идеи за среща</span>
               </div>
             </div>
             <div class="col-xl-8 col-xxl-7">
               <div class="row">
                 <div class="col-xxl-8">
                   <div class="d-flex flex-column gap-6">
-                    <h2 class="mb-0">Featured projects</h2>
-                    <p class="fs-5 mb-0">A glimpse into our creativity—exploring innovative designs, successful
-                      collaborations, and transformative digital experiences.</p>
+                    <h2 class="mb-0">Избери нашето преживяване</h2>
+                    <p class="fs-5 mb-0">Пет прекрасни плана за перфектната среща – избери това, което звучи най-примамливо за нашата вечер.</p>
                   </div>
                 </div>
               </div>
@@ -140,10 +118,10 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
                   </div>
                 </div>
                 <div class="portfolio-details d-flex flex-column gap-3">
-                  <h3 class="mb-0">Snapclear</h3>
+                  <h3 class="mb-0">Уютна вечеря & вино</h3>
                   <div class="hstack gap-2">
-                    <span class="badge text-dark border">UX Strategy</span>
-                    <span class="badge text-dark border">UI Design</span>
+                    <span class="badge text-dark border">Класика</span>
+                    <span class="badge text-dark border">Романтика</span>
                   </div>
                 </div>
               </div>
@@ -160,10 +138,10 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
                   </div>
                 </div>
                 <div class="portfolio-details d-flex flex-column gap-3">
-                  <h3 class="mb-0">Amber Bottle</h3>
+                  <h3 class="mb-0">Кафе, разходка & десерт</h3>
                   <div class="hstack gap-2">
-                    <span class="badge text-dark border">Web development</span>
-                    <span class="badge text-dark border">Digital design</span>
+                    <span class="badge text-dark border">Непринудено</span>
+                    <span class="badge text-dark border">Сладки изкушения</span>
                   </div>
                 </div>
               </div>
@@ -180,10 +158,10 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
                   </div>
                 </div>
                 <div class="portfolio-details d-flex flex-column gap-3">
-                  <h3 class="mb-0">Pixelforge</h3>
+                  <h3 class="mb-0">Гледка на залез с питие</h3>
                   <div class="hstack gap-2">
-                    <span class="badge text-dark border">UI/UX design</span>
-                    <span class="badge text-dark border">Web development</span>
+                    <span class="badge text-dark border">Панорама</span>
+                    <span class="badge text-dark border">Залез</span>
                   </div>
                 </div>
               </div>
@@ -200,10 +178,10 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
                   </div>
                 </div>
                 <div class="portfolio-details d-flex flex-column gap-3">
-                  <h3 class="mb-0">BioTrack LIMS</h3>
+                  <h3 class="mb-0">Кино вечер с пуканки</h3>
                   <div class="hstack gap-2">
-                    <span class="badge text-dark border">Brand identity</span>
-                    <span class="badge text-dark border">Digital design</span>
+                    <span class="badge text-dark border">Уютно</span>
+                    <span class="badge text-dark border">Хубав филм</span>
                   </div>
                 </div>
               </div>

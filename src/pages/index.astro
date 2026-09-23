@@ -13,15 +13,46 @@ import HeroJerryInput from '../components/HeroJerryInput.astro';
 
     <!--  Banner Section -->
     <section class="banner-section position-relative d-flex align-items-center justify-content-center min-vh-100 overflow-hidden">
-      <video class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" autoplay muted loop playsinline>
+      <video
+        id="heroBannerVideo"
+        class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="/assets/images/backgrounds/aboutus-banner.jpg"
+        style="z-index: 0; pointer-events: none;"
+      >
         <source src="/assets/images/backgrounds/banner-video.mp4" type="video/mp4" />
       </video>
-      <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-35 pointer-events-none"></div>
 
       <div class="container position-relative z-1 d-flex flex-column align-items-center justify-content-center text-center py-5">
         <HeroJerryInput />
       </div>
     </section>
+
+    <script is:inline>
+      document.addEventListener("DOMContentLoaded", function () {
+        const video = document.getElementById("heroBannerVideo");
+        if (video) {
+          video.muted = true;
+          const promise = video.play();
+          if (promise !== undefined) {
+            promise.catch(function () {
+              // Browser requires user interaction; play on first click or touch
+              const playOnTouch = function () {
+                video.play();
+                document.removeEventListener("click", playOnTouch);
+                document.removeEventListener("touchstart", playOnTouch);
+              };
+              document.addEventListener("click", playOnTouch, { once: true });
+              document.addEventListener("touchstart", playOnTouch, { once: true });
+            });
+          }
+        }
+      });
+    </script>
 
     <!--  Stats & Facts Section -->
     <section class="stats-facts py-5 py-lg-11 py-xl-12 position-relative overflow-hidden">

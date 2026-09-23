@@ -6,7 +6,7 @@
   <!-- Jerry pointing down into the input field -->
   <div class="hero-jerry-avatar">
     <img
-      src="/img/name_log/jerry_pointing.png"
+      src="/assets/images/backgrounds/jerry_pointing.png"
       alt="Jerry pointing"
       loading="eager"
     />
@@ -35,34 +35,38 @@
         </button>
       </div>
     </div>
-    
+
     <!-- Bright High-Contrast Error Message Badge -->
     <div class="text-center w-100">
       <div id="heroNameError" class="hero-name-error" aria-live="polite"></div>
     </div>
   </form>
 
-  <!-- Success state greeting -->
+  <!-- Success state greeting (clean without hearts) -->
   <div id="heroSuccessCard" class="hero-name-success">
     <div class="d-flex flex-column gap-3 text-center align-items-center">
-      <div class="d-flex align-items-center gap-3">
-        <span class="round-44 rounded-circle bg-danger bg-opacity-10 text-danger d-flex align-items-center justify-content-center flex-shrink-0">
-          <iconify-icon icon="lucide:heart" class="fs-4 text-danger"></iconify-icon>
-        </span>
-        <div class="text-start">
-          <h4 class="mb-0 text-dark fw-bold" id="heroGreetingTitle">Здравей, Дария! ❤️</h4>
-          <p class="mb-0 fs-3 text-muted">Твоята покана за среща те очаква!</p>
-        </div>
+      <div class="text-center">
+        <h4 class="mb-1 text-dark fw-bold" id="heroGreetingTitle">
+          Здравей, Дария!
+        </h4>
+        <p class="mb-0 fs-4 text-muted" id="heroGreetingSubtitle">
+          Твоята покана те очаква!
+        </p>
       </div>
-      
-      <div class="d-flex align-items-center gap-2 mt-2 w-100 justify-content-center">
-        <a href="#plans" class="btn btn-dark text-white rounded-pill px-4 py-2 fs-3 fw-semibold">
-          Виж идеите за среща 👇
+
+      <div
+        class="d-flex align-items-center gap-2 mt-2 w-100 justify-content-center"
+      >
+        <a
+          href="#plans"
+          class="btn btn-dark text-white rounded-pill px-4 py-2 fs-4 fw-semibold"
+        >
+          Виж поканата
         </a>
         <button
           type="button"
           id="heroResetBtn"
-          class="btn btn-outline-secondary rounded-pill px-3 py-2 fs-3"
+          class="btn btn-outline-secondary rounded-pill px-3 py-2 fs-4"
           title="Смени име"
         >
           Смени име
@@ -77,17 +81,17 @@
     position: relative;
     width: 100%;
     max-width: 440px;
-    margin: 100px auto 0;
+    margin: 120px auto 0;
     z-index: 10;
   }
 
   .hero-jerry-avatar {
     position: absolute;
-    top: -95px;
+    top: -150px;
     left: 50%;
     transform: translateX(-50%);
-    width: 140px;
-    height: 140px;
+    width: 195px;
+    height: 195px;
     pointer-events: none;
     user-select: none;
     z-index: 20;
@@ -100,7 +104,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
+    filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
     border: none;
   }
 
@@ -135,7 +139,9 @@
   .hero-name-card.has-error {
     border-color: #ff1744 !important;
     background: #ffffff !important;
-    box-shadow: 0 0 0 4px rgba(255, 23, 68, 0.35), 0 16px 36px rgba(0, 0, 0, 0.4) !important;
+    box-shadow:
+      0 0 0 4px rgba(255, 23, 68, 0.35),
+      0 16px 36px rgba(0, 0, 0, 0.4) !important;
   }
 
   .hero-input-group {
@@ -228,13 +234,16 @@
   }
 
   @keyframes shake {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateX(0);
     }
-    20%, 60% {
+    20%,
+    60% {
       transform: translateX(-8px);
     }
-    40%, 80% {
+    40%,
+    80% {
       transform: translateX(8px);
     }
   }
@@ -257,38 +266,41 @@
 
 <script is:inline>
   function setupHeroNameLogic() {
-    const form = document.getElementById('heroNameForm');
-    const input = document.getElementById('heroNameInput');
-    const card = document.getElementById('heroNameCard');
-    const errorEl = document.getElementById('heroNameError');
-    const successCard = document.getElementById('heroSuccessCard');
-    const greetingTitle = document.getElementById('heroGreetingTitle');
-    const resetBtn = document.getElementById('heroResetBtn');
+    const form = document.getElementById("heroNameForm");
+    const input = document.getElementById("heroNameInput");
+    const card = document.getElementById("heroNameCard");
+    const errorEl = document.getElementById("heroNameError");
+    const successCard = document.getElementById("heroSuccessCard");
+    const greetingTitle = document.getElementById("heroGreetingTitle");
+    const resetBtn = document.getElementById("heroResetBtn");
 
     if (!form || !input || !card || !errorEl || !successCard) return;
 
-    const NAME_ERROR_MESSAGE = 'Опа,май обърка нещо? - пробвай пак.';
-    const EMPTY_ERROR_MESSAGE = 'Полето е задължително';
+    const NAME_ERROR_MESSAGE = "Опа,май обърка нещо? - пробвай пак.";
+    const EMPTY_ERROR_MESSAGE = "Полето е задължително";
 
     function isAllowedName(val) {
       if (!val) return false;
-      const clean = val.trim().toLowerCase().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, '');
+      const clean = val
+        .trim()
+        .toLowerCase()
+        .replace(/^[^\p{L}]+|[^\p{L}]+$/gu, "");
       const validSet = new Set([
-        'дария',
-        'даря',
-        'дари',
-        'дарийка',
-        'дариика',
-        'дариа',
-        'daria',
-        'dariya',
-        'darya',
-        'daryia',
-        'dariq',
-        'dari',
-        'dariika',
-        'dariah',
-        'darriah',
+        "дария",
+        "даря",
+        "дари",
+        "дарийка",
+        "дариика",
+        "дариа",
+        "daria",
+        "dariya",
+        "darya",
+        "daryia",
+        "dariq",
+        "dari",
+        "dariika",
+        "dariah",
+        "darriah",
       ]);
       if (validSet.has(clean)) return true;
       if (/^дар(и|ия|я|ийка|иика|иа)$/i.test(clean)) return true;
@@ -297,37 +309,40 @@
     }
 
     function triggerShake() {
-      form.classList.remove('animate-shake');
+      form.classList.remove("animate-shake");
       void form.offsetWidth;
-      form.classList.add('animate-shake');
+      form.classList.add("animate-shake");
     }
 
     function showError(msg) {
-      card.classList.add('has-error');
-      errorEl.innerHTML = '<iconify-icon icon="solar:danger-triangle-bold" class="fs-5 me-1" style="vertical-align: -2px;"></iconify-icon> ' + msg;
-      errorEl.style.display = 'inline-flex';
-      errorEl.style.alignItems = 'center';
+      card.classList.add("has-error");
+      errorEl.innerHTML =
+        '<iconify-icon icon="solar:danger-triangle-bold" class="fs-5 me-1" style="vertical-align: -2px;"></iconify-icon> ' +
+        msg;
+      errorEl.style.display = "inline-flex";
+      errorEl.style.alignItems = "center";
       triggerShake();
     }
 
     function clearError() {
-      card.classList.remove('has-error');
-      errorEl.textContent = '';
-      errorEl.style.display = 'none';
+      card.classList.remove("has-error");
+      errorEl.textContent = "";
+      errorEl.style.display = "none";
     }
 
     function showSuccess(nameVal) {
       clearError();
-      const formatted = nameVal.trim().charAt(0).toUpperCase() + nameVal.trim().slice(1);
-      greetingTitle.textContent = 'Здравей, ' + formatted + '! ❤️';
-      form.style.display = 'none';
-      successCard.style.display = 'block';
+      const formatted =
+        nameVal.trim().charAt(0).toUpperCase() + nameVal.trim().slice(1);
+      greetingTitle.textContent = "Здравей, " + formatted + "!";
+      form.style.display = "none";
+      successCard.style.display = "block";
     }
 
     // Check URL parameters for preset name (?to=... or ?name=...)
     try {
       const params = new URLSearchParams(window.location.search);
-      const urlName = (params.get('to') || params.get('name') || '').trim();
+      const urlName = (params.get("to") || params.get("name") || "").trim();
       if (urlName) {
         input.value = urlName;
         if (isAllowedName(urlName)) {
@@ -338,11 +353,11 @@
       // Ignore URL parsing errors
     }
 
-    input.addEventListener('input', function () {
+    input.addEventListener("input", function () {
       clearError();
     });
 
-    form.addEventListener('submit', function (e) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
       const trimmed = input.value.trim();
 
@@ -362,18 +377,18 @@
     });
 
     if (resetBtn) {
-      resetBtn.addEventListener('click', function () {
-        successCard.style.display = 'none';
-        form.style.display = 'flex';
-        input.value = '';
+      resetBtn.addEventListener("click", function () {
+        successCard.style.display = "none";
+        form.style.display = "flex";
+        input.value = "";
         clearError();
         input.focus();
       });
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupHeroNameLogic);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupHeroNameLogic);
   } else {
     setupHeroNameLogic();
   }

@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getSupabaseAdmin } from "../../lib/supabase";
+import { notifyVisitorEnter } from "../../lib/telegram";
 
 export const prerender = false;
 
@@ -89,6 +90,19 @@ export const POST: APIRoute = async ({ request }) => {
 
       if (error) {
         console.error("Error inserting visitor_log enter:", error);
+      } else {
+        try {
+          await notifyVisitorEnter({
+            ip: rawIp,
+            device: body.device || parsedUa.device,
+            browser: body.browser || parsedUa.browser,
+            os: body.os || parsedUa.os,
+            currentPage: body.current_page || "/",
+            referrer: body.referrer || null,
+          });
+        } catch (tgErr) {
+          console.error("Telegram visitor notification error:", tgErr);
+        }
       }
     } else if (action === "heartbeat" || action === "leave") {
       // Find the entry time to calculate duration

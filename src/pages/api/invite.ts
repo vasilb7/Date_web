@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getSupabaseAdmin } from "../../lib/supabase";
+import { notifyInviteSubmission } from "../../lib/telegram";
 
 export const prerender = false;
 
@@ -26,6 +27,20 @@ export const POST: APIRoute = async ({ request }) => {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
+    }
+
+    // Send Telegram notification
+    try {
+      await notifyInviteSubmission({
+        name: data.name,
+        phone: data.phone,
+        place: data.place,
+        date: data.date,
+        time: data.time,
+        special_wish: data.special_wish,
+      });
+    } catch (telegramErr) {
+      console.error("Telegram notification error:", telegramErr);
     }
 
     return new Response(JSON.stringify({ success: true }), {

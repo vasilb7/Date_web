@@ -55,6 +55,7 @@ export async function notifyInviteSubmission(invite: {
   date?: string | null;
   time?: string | null;
   special_wish?: string | null;
+  ip?: string | null;
 }) {
   const lines = [
     `💌 <b>Нов потвърден отговор за среща!</b>`,
@@ -68,6 +69,10 @@ export async function notifyInviteSubmission(invite: {
 
   if (invite.special_wish) {
     lines.push(`✨ <b>Специално желание:</b> ${invite.special_wish}`);
+  }
+
+  if (invite.ip) {
+    lines.push(`🌐 <b>IP адрес:</b> <code>${invite.ip}</code>`);
   }
 
   const nowFormatted = new Date().toLocaleString("bg-BG", {
@@ -97,8 +102,9 @@ export async function notifyVisitorEnter(visitor: {
   const lines = [
     `👀 <b>Ново посещение в сайта!</b>`,
     ``,
+    `🌐 <b>IP адрес:</b> <code>${visitor.ip || "Неизвестен"}</code>`,
     `📱 <b>Устройство:</b> ${visitor.device || "Неизвестно"} (${visitor.os || "OS"}, ${visitor.browser || "Browser"})`,
-    `🌐 <b>Страница:</b> ${visitor.currentPage || "/"}`,
+    `📄 <b>Начална страница:</b> ${visitor.currentPage || "/"}`,
   ];
 
   if (visitor.referrer) {

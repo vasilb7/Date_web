@@ -65,18 +65,22 @@ export const POST: APIRoute = async ({ request }) => {
     const nowIso = now.toISOString();
 
     if (action === "enter") {
-      // Send Telegram notification on new visitor enter
-      try {
-        await notifyVisitorEnter({
-          ip: rawIp,
-          device: body.device || parsedUa.device,
-          browser: body.browser || parsedUa.browser,
-          os: body.os || parsedUa.os,
-          currentPage: body.current_page || "/",
-          referrer: body.referrer || null,
-        });
-      } catch (tgErr) {
-        console.error("Telegram visitor notification error:", tgErr);
+      const isFirstVisit = body.is_first_visit === true;
+
+      // Send Telegram notification ONLY on the first site opening, not on every page transition
+      if (isFirstVisit) {
+        try {
+          await notifyVisitorEnter({
+            ip: rawIp,
+            device: body.device || parsedUa.device,
+            browser: body.browser || parsedUa.browser,
+            os: body.os || parsedUa.os,
+            currentPage: body.current_page || "/",
+            referrer: body.referrer || null,
+          });
+        } catch (tgErr) {
+          console.error("Telegram visitor notification error:", tgErr);
+        }
       }
 
       // Insert new visitor entry into Supabase

@@ -1,6 +1,5 @@
 ---
 import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 import VisitorTracker from '../components/VisitorTracker.astro';
 
 interface Props {
@@ -8,7 +7,6 @@ interface Props {
   description?: string;
   activePage?: string;
   showHeader?: boolean;
-  showFooter?: boolean;
 }
 
 const {
@@ -16,7 +14,6 @@ const {
   description = 'JMB е специално преживяване и покана за незабравима среща.',
   activePage = '',
   showHeader = true,
-  showFooter = true,
 } = Astro.props;
 ---
 
@@ -35,8 +32,6 @@ const {
     {showHeader && <Header activePage={activePage} />}
 
     <slot />
-
-    {showFooter && <Footer />}
 
     <script is:inline src="/assets/libs/jquery/dist/jquery.min.js"></script>
     <script is:inline src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

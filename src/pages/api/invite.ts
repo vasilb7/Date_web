@@ -9,6 +9,13 @@ export const POST: APIRoute = async ({ request }) => {
     const data = await request.json();
     const supabase = getSupabaseAdmin();
 
+    const rawIp =
+      request.headers.get("cf-connecting-ip") ||
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      request.headers.get("x-client-ip") ||
+      "127.0.0.1";
+
     // 1. Send Telegram notification immediately so no date invite is ever lost!
     try {
       await notifyInviteSubmission({
@@ -18,6 +25,7 @@ export const POST: APIRoute = async ({ request }) => {
         date: data.date,
         time: data.time,
         special_wish: data.special_wish,
+        ip: rawIp,
       });
     } catch (telegramErr) {
       console.error("Telegram notification error:", telegramErr);

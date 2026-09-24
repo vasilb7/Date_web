@@ -53,7 +53,7 @@ const supabaseAnonKey =
     const referrer = document.referrer || "";
 
     // 4. Send Enter / Visit event to backend
-    function sendLog(action) {
+    function sendLog(action, isFirstVisit) {
       const payload = {
         action: action, // 'enter' | 'heartbeat' | 'leave'
         session_id: sessionId,
@@ -61,6 +61,7 @@ const supabaseAnonKey =
         device: deviceType,
         current_page: window.location.pathname,
         referrer: referrer,
+        is_first_visit: !!isFirstVisit,
       };
 
       const payloadStr = JSON.stringify(payload);
@@ -79,8 +80,12 @@ const supabaseAnonKey =
       }
     }
 
-    // Initial Enter Log
-    sendLog("enter");
+    // Initial Enter Log - only notify Telegram on first opening of the site in this browser session
+    const hasNotifiedThisSession = sessionStorage.getItem("jmb_notified_visit") === "true";
+    if (!hasNotifiedThisSession) {
+      sessionStorage.setItem("jmb_notified_visit", "true");
+    }
+    sendLog("enter", !hasNotifiedThisSession);
 
     // 5. Periodic Heartbeat (every 25 seconds) to track duration & online status
     const heartbeatTimer = setInterval(function () {

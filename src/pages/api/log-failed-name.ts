@@ -30,8 +30,9 @@ function parseUserAgent(ua: string) {
   return { device, os, browser };
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const runtimeEnv = (locals as any)?.runtime?.env;
     const rawIp =
       request.headers.get("cf-connecting-ip") ||
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -56,14 +57,17 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Send Telegram notification immediately
     try {
-      await notifyFailedNameAttempt({
-        name: wrongName,
-        attemptCount: attemptCount,
-        ip: rawIp,
-        device: body.device || parsedUa.device,
-        browser: body.browser || parsedUa.browser,
-        os: body.os || parsedUa.os,
-      });
+      await notifyFailedNameAttempt(
+        {
+          name: wrongName,
+          attemptCount: attemptCount,
+          ip: rawIp,
+          device: body.device || parsedUa.device,
+          browser: body.browser || parsedUa.browser,
+          os: body.os || parsedUa.os,
+        },
+        runtimeEnv
+      );
     } catch (tgErr) {
       console.error("Failed to send Telegram failed name alert:", tgErr);
     }

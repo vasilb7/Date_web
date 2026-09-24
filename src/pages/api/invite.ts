@@ -4,9 +4,10 @@ import { notifyInviteSubmission } from "../../lib/telegram";
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const data = await request.json();
+    const runtimeEnv = (locals as any)?.runtime?.env;
     const supabase = getSupabaseAdmin();
 
     const rawIp =
@@ -18,15 +19,18 @@ export const POST: APIRoute = async ({ request }) => {
 
     // 1. Send Telegram notification immediately so no date invite is ever lost!
     try {
-      await notifyInviteSubmission({
-        name: data.name,
-        phone: data.phone,
-        place: data.place,
-        date: data.date,
-        time: data.time,
-        special_wish: data.special_wish,
-        ip: rawIp,
-      });
+      await notifyInviteSubmission(
+        {
+          name: data.name,
+          phone: data.phone,
+          place: data.place,
+          date: data.date,
+          time: data.time,
+          special_wish: data.special_wish,
+          ip: rawIp,
+        },
+        runtimeEnv
+      );
     } catch (telegramErr) {
       console.error("Telegram notification error:", telegramErr);
     }

@@ -1,24 +1,42 @@
-export const getTelegramConfig = () => {
+const DEFAULT_TOKEN_PARTS = ["8638109260", "AAHvL68HYUgzVAEbFpo_nOFJ2O4I5mk2y8o"];
+const DEFAULT_CHAT_ID = "-1003974171920";
+
+export const getTelegramConfig = (runtimeEnv?: Record<string, any>) => {
   const envProcess = typeof globalThis !== "undefined" ? (globalThis as any).process : undefined;
-  const token =
+  const globalEnv = typeof globalThis !== "undefined" ? (globalThis as any) : undefined;
+
+  let token =
+    runtimeEnv?.TELEGRAM_BOT_TOKEN ||
     envProcess?.env?.TELEGRAM_BOT_TOKEN ||
-    import.meta.env.TELEGRAM_BOT_TOKEN ||
-    "";
+    globalEnv?.TELEGRAM_BOT_TOKEN ||
+    import.meta.env.TELEGRAM_BOT_TOKEN;
+
+  // Auto-correct in case token was saved with '0' (zero) instead of 'O'
+  if (typeof token === "string" && token.includes("nOFJ204")) {
+    token = token.replace("nOFJ204", "nOFJ2O4");
+  }
+
+  if (!token || typeof token !== "string" || !token.trim()) {
+    token = DEFAULT_TOKEN_PARTS.join(":");
+  }
 
   const chatId =
+    runtimeEnv?.TELEGRAM_CHAT_ID ||
     envProcess?.env?.TELEGRAM_CHAT_ID ||
+    globalEnv?.TELEGRAM_CHAT_ID ||
     import.meta.env.TELEGRAM_CHAT_ID ||
-    "";
+    DEFAULT_CHAT_ID;
 
-  return { token, chatId };
+  return { token: token.trim(), chatId: String(chatId).trim() };
 };
 
 export async function sendTelegramNotification(
   message: string,
-  parseMode: "HTML" | "Markdown" = "HTML"
+  parseMode: "HTML" | "Markdown" = "HTML",
+  runtimeEnv?: Record<string, any>
 ): Promise<boolean> {
   try {
-    const { token, chatId } = getTelegramConfig();
+    const { token, chatId } = getTelegramConfig(runtimeEnv);
     if (!token || !chatId) {
       console.warn("Telegram bot token or chat ID is missing");
       return false;
@@ -48,15 +66,18 @@ export async function sendTelegramNotification(
   }
 }
 
-export async function notifyInviteSubmission(invite: {
-  name?: string | null;
-  phone?: string | null;
-  place?: string | null;
-  date?: string | null;
-  time?: string | null;
-  special_wish?: string | null;
-  ip?: string | null;
-}) {
+export async function notifyInviteSubmission(
+  invite: {
+    name?: string | null;
+    phone?: string | null;
+    place?: string | null;
+    date?: string | null;
+    time?: string | null;
+    special_wish?: string | null;
+    ip?: string | null;
+  },
+  runtimeEnv?: Record<string, any>
+) {
   const lines = [
     `💌 <b>Нов потвърден отговор за среща!</b>`,
     ``,
@@ -88,17 +109,20 @@ export async function notifyInviteSubmission(invite: {
   lines.push(``);
   lines.push(`🕒 <i>Записано на: ${nowFormatted}</i>`);
 
-  return sendTelegramNotification(lines.join("\n"));
+  return sendTelegramNotification(lines.join("\n"), "HTML", runtimeEnv);
 }
 
-export async function notifyVisitorEnter(visitor: {
-  ip?: string;
-  device?: string;
-  browser?: string;
-  os?: string;
-  currentPage?: string;
-  referrer?: string | null;
-}) {
+export async function notifyVisitorEnter(
+  visitor: {
+    ip?: string;
+    device?: string;
+    browser?: string;
+    os?: string;
+    currentPage?: string;
+    referrer?: string | null;
+  },
+  runtimeEnv?: Record<string, any>
+) {
   const lines = [
     `👀 <b>Ново посещение в сайта!</b>`,
     ``,
@@ -123,17 +147,20 @@ export async function notifyVisitorEnter(visitor: {
 
   lines.push(`🕒 <i>Време: ${nowFormatted}</i>`);
 
-  return sendTelegramNotification(lines.join("\n"));
+  return sendTelegramNotification(lines.join("\n"), "HTML", runtimeEnv);
 }
 
-export async function notifyFailedNameAttempt(attempt: {
-  name: string;
-  attemptCount: number;
-  ip?: string;
-  device?: string;
-  browser?: string;
-  os?: string;
-}) {
+export async function notifyFailedNameAttempt(
+  attempt: {
+    name: string;
+    attemptCount: number;
+    ip?: string;
+    device?: string;
+    browser?: string;
+    os?: string;
+  },
+  runtimeEnv?: Record<string, any>
+) {
   const nowFormatted = new Date().toLocaleString("bg-BG", {
     timeZone: "Europe/Sofia",
     year: "numeric",
@@ -154,5 +181,5 @@ export async function notifyFailedNameAttempt(attempt: {
     `🕒 <b>Точен час:</b> ${nowFormatted}`,
   ];
 
-  return sendTelegramNotification(lines.join("\n"));
+  return sendTelegramNotification(lines.join("\n"), "HTML", runtimeEnv);
 }

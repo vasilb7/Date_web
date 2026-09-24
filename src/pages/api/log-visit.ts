@@ -31,8 +31,9 @@ function parseUserAgent(ua: string) {
   return { device, os, browser };
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   try {
+    const runtimeEnv = (locals as any)?.runtime?.env;
     const rawIp =
       request.headers.get("cf-connecting-ip") ||
       request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -70,14 +71,17 @@ export const POST: APIRoute = async ({ request }) => {
       // Send Telegram notification ONLY on the first site opening, not on every page transition
       if (isFirstVisit) {
         try {
-          await notifyVisitorEnter({
-            ip: rawIp,
-            device: body.device || parsedUa.device,
-            browser: body.browser || parsedUa.browser,
-            os: body.os || parsedUa.os,
-            currentPage: body.current_page || "/",
-            referrer: body.referrer || null,
-          });
+          await notifyVisitorEnter(
+            {
+              ip: rawIp,
+              device: body.device || parsedUa.device,
+              browser: body.browser || parsedUa.browser,
+              os: body.os || parsedUa.os,
+              currentPage: body.current_page || "/",
+              referrer: body.referrer || null,
+            },
+            runtimeEnv
+          );
         } catch (tgErr) {
           console.error("Telegram visitor notification error:", tgErr);
         }

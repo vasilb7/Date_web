@@ -6,5 +6,9 @@
     "binding": "ASSETS"
   },
   "compatibility_date": "2024-09-23",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "PUBLIC_SUPABASE_URL": "https://fbkjzteyzebyigrvmbps.supabase.co",
+    "PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZia2p6dGV5emVieWlncnZtYnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODkxMTYsImV4cCI6MjEwNTc2NTExNn0.qH5AHUZAbvPDraJqyR1H8MyunMVgEaYsDk9krNBsXoU"
+  }
 }

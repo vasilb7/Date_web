@@ -65,7 +65,21 @@ export const POST: APIRoute = async ({ request }) => {
     const nowIso = now.toISOString();
 
     if (action === "enter") {
-      // Insert new visitor entry
+      // Send Telegram notification on new visitor enter
+      try {
+        await notifyVisitorEnter({
+          ip: rawIp,
+          device: body.device || parsedUa.device,
+          browser: body.browser || parsedUa.browser,
+          os: body.os || parsedUa.os,
+          currentPage: body.current_page || "/",
+          referrer: body.referrer || null,
+        });
+      } catch (tgErr) {
+        console.error("Telegram visitor notification error:", tgErr);
+      }
+
+      // Insert new visitor entry into Supabase
       const { error } = await supabase.from("visitor_logs").upsert(
         [
           {
@@ -90,19 +104,6 @@ export const POST: APIRoute = async ({ request }) => {
 
       if (error) {
         console.error("Error inserting visitor_log enter:", error);
-      } else {
-        try {
-          await notifyVisitorEnter({
-            ip: rawIp,
-            device: body.device || parsedUa.device,
-            browser: body.browser || parsedUa.browser,
-            os: body.os || parsedUa.os,
-            currentPage: body.current_page || "/",
-            referrer: body.referrer || null,
-          });
-        } catch (tgErr) {
-          console.error("Telegram visitor notification error:", tgErr);
-        }
       }
     } else if (action === "heartbeat" || action === "leave") {
       // Find the entry time to calculate duration

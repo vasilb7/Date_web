@@ -1,11 +1,12 @@
 export const getTelegramConfig = () => {
+  const envProcess = typeof globalThis !== "undefined" ? (globalThis as any).process : undefined;
   const token =
-    (typeof process !== "undefined" && process.env?.TELEGRAM_BOT_TOKEN) ||
+    envProcess?.env?.TELEGRAM_BOT_TOKEN ||
     import.meta.env.TELEGRAM_BOT_TOKEN ||
     "8638109260:AAHvL68HYUgzVAEbFpo_nOFJ2O4I5mk2y8o";
 
   const chatId =
-    (typeof process !== "undefined" && process.env?.TELEGRAM_CHAT_ID) ||
+    envProcess?.env?.TELEGRAM_CHAT_ID ||
     import.meta.env.TELEGRAM_CHAT_ID ||
     "-1003974171920";
 

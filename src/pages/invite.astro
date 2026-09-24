@@ -151,7 +151,7 @@ import Layout from "../layouts/Layout.astro";
                     />
                   </div>
                   <div class="field-error-msg" id="dateError">
-                    Моля, избери валидна дата от утре нататък.
+                    Моля, избери валидна дата (от днес нататък).
                   </div>
                 </div>
 
@@ -464,16 +464,17 @@ import Layout from "../layouts/Layout.astro";
         placeSelect.addEventListener("change", syncSelectColor);
       }
 
-      // Set calendar min to tomorrow in local timezone (strictly no past dates or today)
+      // Set calendar min to today in local timezone (strictly no past dates)
       if (dateInput) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const yyyy = tomorrow.getFullYear();
-        const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
-        const dd = String(tomorrow.getDate()).padStart(2, "0");
-        const minDateStr = yyyy + "-" + mm + "-" + dd;
-        dateInput.min = minDateStr;
-        dateInput.value = minDateStr; // default to tomorrow
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0");
+        const dd = String(today.getDate()).padStart(2, "0");
+        const todayStr = yyyy + "-" + mm + "-" + dd;
+        dateInput.min = todayStr;
+        if (!dateInput.value) {
+          dateInput.value = todayStr;
+        }
       }
 
       // Clear errors on input
@@ -498,13 +499,17 @@ import Layout from "../layouts/Layout.astro";
       if (timeHourInput) {
         timeHourInput.addEventListener("input", () => {
           timeHourCard.classList.remove("has-error");
-          timeError.style.display = "none";
+          if (!timeMinCard.classList.contains("has-error")) {
+            timeError.style.display = "none";
+          }
         });
       }
       if (timeMinInput) {
         timeMinInput.addEventListener("input", () => {
           timeMinCard.classList.remove("has-error");
-          timeError.style.display = "none";
+          if (!timeHourCard.classList.contains("has-error")) {
+            timeError.style.display = "none";
+          }
         });
       }
 
@@ -543,7 +548,7 @@ import Layout from "../layouts/Layout.astro";
           let isValid = true;
 
           // Phone check
-          const phoneVal = (phoneInput.value || "").trim();
+          const phoneVal = (phoneInput ? phoneInput.value : "").trim();
           if (!phoneVal || phoneVal.length < 6) {
             phoneCard.classList.add("has-error");
             phoneError.style.display = "block";
@@ -554,7 +559,7 @@ import Layout from "../layouts/Layout.astro";
           }
 
           // Place check
-          if (!placeSelect.value) {
+          if (!placeSelect || !placeSelect.value) {
             placeCard.classList.add("has-error");
             placeError.style.display = "block";
             isValid = false;
@@ -564,8 +569,8 @@ import Layout from "../layouts/Layout.astro";
           }
 
           // Date check
-          const dateVal = dateInput.value;
-          if (!dateVal || dateVal < dateInput.min) {
+          const dateVal = dateInput ? dateInput.value : "";
+          if (!dateVal || (dateInput.min && dateVal < dateInput.min)) {
             dateCard.classList.add("has-error");
             dateError.style.display = "block";
             isValid = false;
@@ -575,19 +580,31 @@ import Layout from "../layouts/Layout.astro";
           }
 
           // Time check
-          const hourVal = parseInt(timeHourInput.value, 10);
-          const minVal = parseInt(timeMinInput.value, 10);
+          const hourVal = timeHourInput ? parseInt(timeHourInput.value, 10) : NaN;
+          const minVal = timeMinInput ? parseInt(timeMinInput.value, 10) : NaN;
           let timeVal = "";
 
           let timeValid = true;
-          if (isNaN(hourVal) || hourVal < 0 || hourVal > 23) {
+          if (
+            isNaN(hourVal) ||
+            hourVal < 0 ||
+            hourVal > 23 ||
+            !timeHourInput ||
+            timeHourInput.value.trim() === ""
+          ) {
             timeHourCard.classList.add("has-error");
             timeValid = false;
           } else {
             timeHourCard.classList.remove("has-error");
           }
 
-          if (isNaN(minVal) || minVal < 0 || minVal > 59) {
+          if (
+            isNaN(minVal) ||
+            minVal < 0 ||
+            minVal > 59 ||
+            !timeMinInput ||
+            timeMinInput.value.trim() === ""
+          ) {
             timeMinCard.classList.add("has-error");
             timeValid = false;
           } else {
@@ -605,7 +622,32 @@ import Layout from "../layouts/Layout.astro";
               String(minVal).padStart(2, "0");
           }
 
-          if (!isValid) return;
+          if (!isValid) {
+            const firstError = form.querySelector(".hero-like-card.has-error");
+            if (firstError) {
+              firstError.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+              });
+              const inputEl = firstError.querySelector("input, select, textarea");
+              if (inputEl) inputEl.focus();
+            }
+            return;
+          }
+
+          // Disable submit button and show sending status
+          const submitBtn = document.getElementById("inviteSubmitBtn");
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.85";
+            submitBtn.textContent = "Изпращане...";
+          }
+
+          // Trigger celebratory confetti
+          triggerCelebrationConfetti();
+
+          // Extract wish value safely
+          const wishVal = wishInput ? (wishInput.value || "").trim() : "";
 
           // Prepare invite data
           const inviteData = {
@@ -617,33 +659,43 @@ import Layout from "../layouts/Layout.astro";
             special_wish: wishVal || null,
           };
 
-          // Send to backend API
+          const successUrl =
+            "/success" +
+            (currentName ? "?to=" + encodeURIComponent(currentName) : "");
+
+          let redirected = false;
+          const doRedirect = () => {
+            if (redirected) return;
+            redirected = true;
+            if (submitBtn) submitBtn.textContent = "Изпратено! ❤️";
+            setTimeout(() => {
+              window.location.href = successUrl;
+            }, 300);
+          };
+
+          // Fallback redirect after 2.5 seconds maximum so user is never stuck
+          const fallbackTimer = setTimeout(doRedirect, 2500);
+
           try {
             fetch("/api/invite", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(inviteData),
-            }).catch((err) => console.warn("API submit error:", err));
+            })
+              .then(() => {
+                clearTimeout(fallbackTimer);
+                doRedirect();
+              })
+              .catch((err) => {
+                console.warn("API submit error:", err);
+                clearTimeout(fallbackTimer);
+                doRedirect();
+              });
           } catch (err) {
             console.warn("Submit error:", err);
+            clearTimeout(fallbackTimer);
+            doRedirect();
           }
-
-          // Trigger celebratory confetti and redirect to dedicated fullscreen /success page
-          triggerCelebrationConfetti();
-
-          const submitBtn = document.getElementById("inviteSubmitBtn");
-          if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = "0.8";
-            submitBtn.textContent = "Изпратено! ❤️";
-          }
-
-          const successUrl =
-            "/success" +
-            (currentName ? "?to=" + encodeURIComponent(currentName) : "");
-          setTimeout(() => {
-            window.location.href = successUrl;
-          }, 400);
         });
       }
     });

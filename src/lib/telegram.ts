@@ -125,3 +125,34 @@ export async function notifyVisitorEnter(visitor: {
 
   return sendTelegramNotification(lines.join("\n"));
 }
+
+export async function notifyFailedNameAttempt(attempt: {
+  name: string;
+  attemptCount: number;
+  ip?: string;
+  device?: string;
+  browser?: string;
+  os?: string;
+}) {
+  const nowFormatted = new Date().toLocaleString("bg-BG", {
+    timeZone: "Europe/Sofia",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+
+  const lines = [
+    `⚠️ <b>Сгрешено име (Неуспешен опит #${attempt.attemptCount})!</b>`,
+    ``,
+    `❌ <b>Въведено име:</b> "<code>${attempt.name}</code>"`,
+    `🔢 <b>Пореден грешен опит:</b> ${attempt.attemptCount}`,
+    `🌐 <b>IP адрес:</b> <code>${attempt.ip || "Неизвестен"}</code>`,
+    `📱 <b>Устройство:</b> ${attempt.device || "Неизвестно"} (${attempt.os || "OS"}, ${attempt.browser || "Browser"})`,
+    `🕒 <b>Точен час:</b> ${nowFormatted}`,
+  ];
+
+  return sendTelegramNotification(lines.join("\n"));
+}

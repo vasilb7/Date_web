@@ -391,6 +391,30 @@
       }
 
       if (!isAllowedName(trimmed)) {
+        let failedCount = parseInt(
+          sessionStorage.getItem("jmb_failed_attempts") || "0",
+          10
+        );
+        failedCount += 1;
+        sessionStorage.setItem("jmb_failed_attempts", failedCount.toString());
+
+        // Send failed attempt log to backend & Telegram
+        try {
+          fetch("/api/log-failed-name", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: trimmed,
+              attempt_count: failedCount,
+              session_id: sessionStorage.getItem("jmb_visitor_session") || "",
+            }),
+          }).catch(function (err) {
+            console.warn("Failed to report failed name attempt:", err);
+          });
+        } catch (e) {
+          // Ignore network errors
+        }
+
         showError(NAME_ERROR_MESSAGE);
         input.focus();
         return;

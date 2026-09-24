@@ -1,0 +1,142 @@
+---
+// VisitorTracker component for logging entry/exit, device, IP, and Supabase Realtime presence
+const supabaseUrl =
+  import.meta.env.PUBLIC_SUPABASE_URL ||
+  "https://fbkjzteyzebyigrvmbps.supabase.co";
+const supabaseAnonKey =
+  import.meta.env.PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZia2p6dGV5emVieWlncnZtYnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODkxMTYsImV4cCI6MjEwNTc2NTExNn0.qH5AHUZAbvPDraJqyR1H8MyunMVgEaYsDk9krNBsXoU";
+---
+
+<script
+  is:inline
+  src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+></script>
+
+<script is:inline define:vars={{ supabaseUrl, supabaseAnonKey }}>
+  (function () {
+    // 1. Session ID management (persisted during active browser session)
+    let sessionId = sessionStorage.getItem("jmb_visitor_session");
+    if (!sessionId) {
+      sessionId =
+        "v_" +
+        Date.now() +
+        "_" +
+        Math.random().toString(36).substring(2, 9);
+      sessionStorage.setItem("jmb_visitor_session", sessionId);
+    }
+
+    // 2. Identify target name if present in URL or previous session
+    let targetName = "";
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      targetName = (urlParams.get("to") || urlParams.get("name") || "").trim();
+      if (targetName) {
+        sessionStorage.setItem("jmb_visitor_name", targetName);
+      } else {
+        targetName = sessionStorage.getItem("jmb_visitor_name") || "";
+      }
+    } catch (e) {
+      // Ignore
+    }
+
+    // 3. Detect client-side device info
+    const ua = navigator.userAgent || "";
+    let deviceType = "Desktop";
+    if (/Mobile|Android|iP(hone|od)/i.test(ua)) {
+      deviceType = "Mobile";
+    } else if (/iPad|Tablet/i.test(ua)) {
+      deviceType = "Tablet";
+    }
+
+    const currentPage = window.location.pathname;
+    const referrer = document.referrer || "";
+
+    // 4. Send Enter / Visit event to backend
+    function sendLog(action) {
+      const payload = {
+        action: action, // 'enter' | 'heartbeat' | 'leave'
+        session_id: sessionId,
+        name: targetName || null,
+        device: deviceType,
+        current_page: window.location.pathname,
+        referrer: referrer,
+      };
+
+      const payloadStr = JSON.stringify(payload);
+
+      if (action === "leave" && navigator.sendBeacon) {
+        navigator.sendBeacon("/api/log-visit", payloadStr);
+      } else {
+        fetch("/api/log-visit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: payloadStr,
+          keepalive: action === "leave",
+        }).catch(function (err) {
+          // Ignore network log errors on exit
+        });
+      }
+    }
+
+    // Initial Enter Log
+    sendLog("enter");
+
+    // 5. Periodic Heartbeat (every 25 seconds) to track duration & online status
+    const heartbeatTimer = setInterval(function () {
+      sendLog("heartbeat");
+    }, 25000);
+
+    // 6. Leave tracking on tab close or navigation away
+    window.addEventListener("pagehide", function () {
+      clearInterval(heartbeatTimer);
+      sendLog("leave");
+    });
+    window.addEventListener("beforeunload", function () {
+      clearInterval(heartbeatTimer);
+      sendLog("leave");
+    });
+
+    // 7. Supabase Realtime Presence Channel
+    try {
+      if (window.supabase && typeof window.supabase.createClient === "function") {
+        const client = window.supabase.createClient(
+          supabaseUrl,
+          supabaseAnonKey
+        );
+        const channel = client.channel("online-dating-room", {
+          config: {
+            presence: {
+              key: sessionId,
+            },
+          },
+        });
+
+        channel
+          .on("presence", { event: "sync" }, function () {
+            // Presence synchronized
+          })
+          .subscribe(function (status) {
+            if (status === "SUBSCRIBED") {
+              channel.track({
+                name: targetName || "Гост",
+                page: window.location.pathname,
+                device: deviceType,
+                entered_at: new Date().toISOString(),
+                online: true,
+              });
+            }
+          });
+
+        window.addEventListener("pagehide", function () {
+          try {
+            channel.untrack();
+            channel.unsubscribe();
+          } catch (e) {}
+        });
+      }
+    } catch (realtimeErr) {
+      console.warn("Supabase Realtime init error:", realtimeErr);
+    }
+  })();
+</script>

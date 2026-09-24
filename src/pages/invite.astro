@@ -1,0 +1,651 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Покана за среща - JMB" activePage="invite">
+  <div class="page-wrapper overflow-hidden">
+    <!-- Compact Banner Section -->
+    <section
+      class="banner-section banner-inner-section position-relative overflow-hidden d-flex align-items-center"
+      style="background: #000000 url(/assets/images/backgrounds/banner.webp) center center / cover no-repeat; padding: clamp(20px, 4vh, 32px) 0;"
+    >
+      <div class="container px-3 px-sm-4">
+        <div
+          class="d-flex flex-column gap-2 text-center text-sm-start position-relative z-1"
+        >
+          <div>
+            <span
+              class="badge text-bg-primary text-dark px-3 py-1-5 rounded-pill fw-bold fs-6"
+            >
+              Изборът е в твоите ръце
+            </span>
+          </div>
+          <h1
+            class="mb-0 text-white fw-bolder fs-3 fs-sm-2 fs-md-1 lh-sm"
+            id="inviteBannerTitle"
+          >
+            Покана за среща
+          </h1>
+          <p
+            class="text-white text-opacity-80 fs-6 mb-0"
+            id="invitePersonalizedSubtitle"
+          >
+            Специално за теб, избери кога и къде ти е най-удобно да се видим.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Invite Form Section -->
+    <section
+      class="invite-form-section py-2 py-sm-3 py-md-4 bg-light-gray position-relative"
+    >
+      <div class="container px-2 px-sm-3 px-md-4">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+            <!-- Form Card -->
+            <div
+              class="card border-0 shadow-sm rounded-4 p-3 p-sm-4 p-md-5 bg-white"
+              id="inviteFormCard"
+            >
+              <div class="pb-3 mb-3 text-center text-md-start">
+                <span
+                  class="badge bg-primary text-dark px-3 py-1-5 rounded-pill fw-bold mb-2 fs-7"
+                  >Чакам те!</span
+                >
+                <h2
+                  class="mb-1 text-dark fw-bold fs-4 fs-md-3"
+                  id="inviteCardHeading"
+                >
+                  Кажи „Да“ на нашата среща!
+                </h2>
+                <p class="text-muted fs-6 mb-0">
+                  Попълни детайлите, за да подготвя всичко перфектно. ❤️
+                </p>
+              </div>
+
+              <form
+                id="datingInviteForm"
+                class="d-flex flex-column gap-3"
+                novalidate
+              >
+                <!-- 1. Телефонен номер -->
+                <div class="form-group">
+                  <label
+                    for="invitePhone"
+                    class="form-label fw-bold text-dark fs-6 mb-1"
+                  >
+                    Телефонен номер <span class="text-danger">*</span>
+                  </label>
+                  <div class="hero-like-card" id="phoneCard">
+                    <input
+                      type="tel"
+                      id="invitePhone"
+                      name="phone"
+                      class="hero-like-input"
+                      placeholder="Телефонен номер"
+                      required
+                      autocomplete="tel"
+                    />
+                  </div>
+                  <div class="field-error-msg" id="phoneError">
+                    Моля, въведи валиден телефонен номер.
+                  </div>
+                </div>
+
+                <!-- 2. Кое място би искала да посетим -->
+                <div class="form-group">
+                  <label
+                    for="invitePlace"
+                    class="form-label fw-bold text-dark fs-6 mb-1"
+                  >
+                    Кое място би искала да посетим? <span class="text-danger"
+                      >*</span
+                    >
+                  </label>
+                  <div class="hero-like-card" id="placeCard">
+                    <select
+                      id="invitePlace"
+                      name="place"
+                      class="hero-like-input hero-like-select is-placeholder"
+                      required
+                    >
+                      <option value="" disabled selected
+                        >Избери желано преживяване...</option
+                      >
+                      <option value="Вечеря в ресторант с гледка">
+                        Вечеря в ресторант с гледка
+                      </option>
+                      <option value="Разходка и кафе"> Разходка и кафе </option>
+                      <option value="Кино вечер"> Кино вечер </option>
+                      <option
+                        value="Тайнствено изживяване-изненада (остави избора на мен)"
+                      >
+                        Тайнствено изживяване-изненада (остави избора на мен)
+                      </option>
+                      <option value="Каквото съдбата реши!">
+                        Каквото съдбата реши!
+                      </option>
+                    </select>
+                  </div>
+                  <div class="field-error-msg" id="placeError">
+                    Моля, избери предпочитано място.
+                  </div>
+                </div>
+
+                <!-- 3. Календар от днешни дати без връщане в миналото -->
+                <div class="form-group">
+                  <label
+                    for="inviteDate"
+                    class="form-label fw-bold text-dark fs-6 mb-1"
+                  >
+                    Дата на срещата <span class="text-danger">*</span>
+                  </label>
+                  <div class="hero-like-card" id="dateCard">
+                    <input
+                      type="date"
+                      id="inviteDate"
+                      name="date"
+                      class="hero-like-input"
+                      required
+                    />
+                  </div>
+                  <div class="field-error-msg" id="dateError">
+                    Моля, избери валидна дата от утре нататък.
+                  </div>
+                </div>
+
+                <!-- 4. И колко часа да напише часът с цифри -->
+                <div class="form-group">
+                  <label class="form-label fw-bold text-dark fs-6 mb-1">
+                    В колко часа? <span class="text-danger">*</span>
+                  </label>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="hero-like-card flex-grow-1" id="timeHourCard">
+                      <input
+                        type="number"
+                        id="inviteTimeHour"
+                        class="hero-like-input text-center px-0"
+                        placeholder="Час (0-23)"
+                        min="0"
+                        max="23"
+                        required
+                      />
+                    </div>
+                    <span class="fs-4 fw-bold text-dark">:</span>
+                    <div class="hero-like-card flex-grow-1" id="timeMinCard">
+                      <input
+                        type="number"
+                        id="inviteTimeMin"
+                        class="hero-like-input text-center px-0"
+                        placeholder="Мин (0-59)"
+                        min="0"
+                        max="59"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="field-error-msg" id="timeError">
+                    Моля, въведи валиден час (0-23) и минути (0-59).
+                  </div>
+                </div>
+
+                <!-- 5. Специално желание или любимо място (по желание) -->
+                <div class="form-group">
+                  <label
+                    for="inviteWish"
+                    class="form-label fw-bold text-dark fs-6 mb-1"
+                  >
+                    Специално желание или любимо място (по желание)
+                  </label>
+                  <div class="hero-like-card" id="wishCard">
+                    <textarea
+                      id="inviteWish"
+                      name="special_wish"
+                      class="hero-like-input hero-like-textarea"
+                      rows="2"
+                      placeholder="Любимо заведение, предпочитания или специална идея..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <!-- 6. Бутони единствено Да,с удоволствие! без svg -->
+                <div class="mt-2">
+                  <button
+                    type="submit"
+                    id="inviteSubmitBtn"
+                    class="invite-submit-btn"
+                  >
+                    Да,с удоволствие!
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Confetti library -->
+  <script
+    is:inline
+    src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
+  ></script>
+
+  <style is:global>
+    /* Border-free modern styling for invite form */
+    .hero-like-card {
+      position: relative !important;
+      width: 100% !important;
+      background: #f8fafc !important;
+      border-radius: 14px !important;
+      padding: 2px 14px !important;
+      border: none !important;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+      transition: all 0.2s ease !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+
+    .hero-like-card:focus-within {
+      border: none !important;
+      background: #ffffff !important;
+      box-shadow:
+        inset 0 0 0 2px #141414,
+        0 4px 14px rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .hero-like-card.has-error {
+      border: none !important;
+      background: #ffffff !important;
+      box-shadow:
+        inset 0 0 0 2px #ff1744,
+        0 4px 12px rgba(255, 23, 68, 0.15) !important;
+    }
+
+    .hero-like-input {
+      width: 100% !important;
+      height: 48px !important;
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      font-size: 16px !important;
+      font-family: inherit !important;
+      font-weight: 600 !important;
+      color: #141414 !important;
+      padding: 0 4px !important;
+      margin: 0 !important;
+      display: block !important;
+    }
+
+    .hero-like-input::placeholder,
+    .hero-like-textarea::placeholder {
+      color: #71717a !important;
+      font-weight: 500 !important;
+      opacity: 1 !important;
+    }
+
+    .hero-like-select {
+      cursor: pointer !important;
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      background: transparent
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+        no-repeat right 12px center !important;
+      background-size: 18px !important;
+      padding-right: 40px !important;
+    }
+
+    .hero-like-select:invalid,
+    .hero-like-select.is-placeholder {
+      color: #71717a !important;
+      font-weight: 500 !important;
+    }
+
+    .hero-like-select:not(.is-placeholder) {
+      color: #141414 !important;
+      font-weight: 600 !important;
+    }
+
+    .hero-like-select option {
+      background-color: #ffffff !important;
+      color: #141414 !important;
+      padding: 10px !important;
+      font-size: 15px !important;
+      font-weight: 500 !important;
+    }
+
+    .hero-like-textarea {
+      height: auto !important;
+      min-height: 72px !important;
+      padding: 10px 4px !important;
+      resize: vertical !important;
+    }
+
+    .field-error-msg {
+      display: none;
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 4px;
+      padding-left: 2px;
+    }
+
+    /* Submit button without border */
+    .invite-submit-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      background-color: #141414 !important;
+      color: #ffffff !important;
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.2px !important;
+      padding: 14px 28px !important;
+      border-radius: 50px !important;
+      border: none !important;
+      cursor: pointer !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18) !important;
+      text-decoration: none !important;
+    }
+
+    .invite-submit-btn:hover {
+      background-color: #000000 !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    .invite-submit-btn:active {
+      transform: scale(0.98) !important;
+    }
+
+    /* Success box without borders */
+    .invite-success-box {
+      background: #ffffff !important;
+      border-radius: 20px !important;
+      padding: 32px 18px !important;
+      box-shadow: none !important;
+      border: none !important;
+      animation: mat-subscript-enter 0.3s ease-out;
+    }
+
+    .round-64 {
+      width: 64px;
+      height: 64px;
+    }
+
+    @keyframes mat-subscript-enter {
+      from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  </style>
+
+  <script is:inline>
+    document.addEventListener("DOMContentLoaded", function () {
+      const form = document.getElementById("datingInviteForm");
+      const dateInput = document.getElementById("inviteDate");
+      const timeHourInput = document.getElementById("inviteTimeHour");
+      const timeMinInput = document.getElementById("inviteTimeMin");
+      const phoneInput = document.getElementById("invitePhone");
+      const placeSelect = document.getElementById("invitePlace");
+      const wishInput = document.getElementById("inviteWish");
+
+      const phoneCard = document.getElementById("phoneCard");
+      const placeCard = document.getElementById("placeCard");
+      const dateCard = document.getElementById("dateCard");
+      const timeHourCard = document.getElementById("timeHourCard");
+      const timeMinCard = document.getElementById("timeMinCard");
+
+      const phoneError = document.getElementById("phoneError");
+      const placeError = document.getElementById("placeError");
+      const dateError = document.getElementById("dateError");
+      const timeError = document.getElementById("timeError");
+
+      let currentName = "";
+
+      // Personalized title based on URL query parameter (?to=Дария or ?name=...)
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const toName = (params.get("to") || params.get("name") || "").trim();
+        if (toName) {
+          currentName = toName.charAt(0).toUpperCase() + toName.slice(1);
+          const titleEl = document.getElementById("inviteBannerTitle");
+          const headingEl = document.getElementById("inviteCardHeading");
+          const subtitleEl = document.getElementById(
+            "invitePersonalizedSubtitle",
+          );
+          if (titleEl) titleEl.textContent = "Покана за " + currentName;
+          if (headingEl)
+            headingEl.textContent =
+              currentName + ", кажи „Да“ на нашата среща!";
+          if (subtitleEl)
+            subtitleEl.textContent =
+              "Специално за теб, избери кога и къде ти е най-удобно да се видим.";
+        }
+
+        const preselectedPlan = (params.get("plan") || "").trim();
+        if (preselectedPlan && placeSelect) {
+          for (let i = 0; i < placeSelect.options.length; i++) {
+            if (
+              placeSelect.options[i].value
+                .toLowerCase()
+                .includes(preselectedPlan.toLowerCase())
+            ) {
+              placeSelect.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      } catch (e) {
+        // Ignore URL parsing errors
+      }
+
+      // Toggle select placeholder class
+      if (placeSelect) {
+        function syncSelectColor() {
+          if (!placeSelect.value) {
+            placeSelect.classList.add("is-placeholder");
+          } else {
+            placeSelect.classList.remove("is-placeholder");
+          }
+        }
+        syncSelectColor();
+        placeSelect.addEventListener("change", syncSelectColor);
+      }
+
+      // Set calendar min to tomorrow in local timezone (strictly no past dates or today)
+      if (dateInput) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const yyyy = tomorrow.getFullYear();
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, "0");
+        const dd = String(tomorrow.getDate()).padStart(2, "0");
+        const minDateStr = yyyy + "-" + mm + "-" + dd;
+        dateInput.min = minDateStr;
+        dateInput.value = minDateStr; // default to tomorrow
+      }
+
+      // Clear errors on input
+      if (phoneInput) {
+        phoneInput.addEventListener("input", () => {
+          phoneCard.classList.remove("has-error");
+          phoneError.style.display = "none";
+        });
+      }
+      if (placeSelect) {
+        placeSelect.addEventListener("change", () => {
+          placeCard.classList.remove("has-error");
+          placeError.style.display = "none";
+        });
+      }
+      if (dateInput) {
+        dateInput.addEventListener("input", () => {
+          dateCard.classList.remove("has-error");
+          dateError.style.display = "none";
+        });
+      }
+      if (timeHourInput) {
+        timeHourInput.addEventListener("input", () => {
+          timeHourCard.classList.remove("has-error");
+          timeError.style.display = "none";
+        });
+      }
+      if (timeMinInput) {
+        timeMinInput.addEventListener("input", () => {
+          timeMinCard.classList.remove("has-error");
+          timeError.style.display = "none";
+        });
+      }
+
+      // Fire Confetti animation
+      function triggerCelebrationConfetti() {
+        if (typeof confetti === "function") {
+          confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            zIndex: 99999,
+          });
+          setTimeout(() => {
+            confetti({
+              particleCount: 60,
+              angle: 60,
+              spread: 60,
+              origin: { x: 0, y: 0.7 },
+              zIndex: 99999,
+            });
+            confetti({
+              particleCount: 60,
+              angle: 120,
+              spread: 60,
+              origin: { x: 1, y: 0.7 },
+              zIndex: 99999,
+            });
+          }, 220);
+        }
+      }
+
+      // Form submission validation
+      if (form) {
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          let isValid = true;
+
+          // Phone check
+          const phoneVal = (phoneInput.value || "").trim();
+          if (!phoneVal || phoneVal.length < 6) {
+            phoneCard.classList.add("has-error");
+            phoneError.style.display = "block";
+            isValid = false;
+          } else {
+            phoneCard.classList.remove("has-error");
+            phoneError.style.display = "none";
+          }
+
+          // Place check
+          if (!placeSelect.value) {
+            placeCard.classList.add("has-error");
+            placeError.style.display = "block";
+            isValid = false;
+          } else {
+            placeCard.classList.remove("has-error");
+            placeError.style.display = "none";
+          }
+
+          // Date check
+          const dateVal = dateInput.value;
+          if (!dateVal || dateVal < dateInput.min) {
+            dateCard.classList.add("has-error");
+            dateError.style.display = "block";
+            isValid = false;
+          } else {
+            dateCard.classList.remove("has-error");
+            dateError.style.display = "none";
+          }
+
+          // Time check
+          const hourVal = parseInt(timeHourInput.value, 10);
+          const minVal = parseInt(timeMinInput.value, 10);
+          let timeVal = "";
+
+          let timeValid = true;
+          if (isNaN(hourVal) || hourVal < 0 || hourVal > 23) {
+            timeHourCard.classList.add("has-error");
+            timeValid = false;
+          } else {
+            timeHourCard.classList.remove("has-error");
+          }
+
+          if (isNaN(minVal) || minVal < 0 || minVal > 59) {
+            timeMinCard.classList.add("has-error");
+            timeValid = false;
+          } else {
+            timeMinCard.classList.remove("has-error");
+          }
+
+          if (!timeValid) {
+            timeError.style.display = "block";
+            isValid = false;
+          } else {
+            timeError.style.display = "none";
+            timeVal =
+              String(hourVal).padStart(2, "0") +
+              ":" +
+              String(minVal).padStart(2, "0");
+          }
+
+          if (!isValid) return;
+
+          // Prepare invite data
+          const inviteData = {
+            name: currentName || null,
+            phone: phoneVal,
+            place: placeSelect.value,
+            date: dateVal,
+            time: timeVal,
+            special_wish: wishVal || null,
+          };
+
+          // Send to backend API
+          try {
+            fetch("/api/invite", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(inviteData),
+            }).catch((err) => console.warn("API submit error:", err));
+          } catch (err) {
+            console.warn("Submit error:", err);
+          }
+
+          // Trigger celebratory confetti and redirect to dedicated fullscreen /success page
+          triggerCelebrationConfetti();
+
+          const submitBtn = document.getElementById("inviteSubmitBtn");
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.8";
+            submitBtn.textContent = "Изпратено! ❤️";
+          }
+
+          const successUrl =
+            "/success" +
+            (currentName ? "?to=" + encodeURIComponent(currentName) : "");
+          setTimeout(() => {
+            window.location.href = successUrl;
+          }, 400);
+        });
+      }
+    });
+  </script>
+</Layout>

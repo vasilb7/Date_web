@@ -6,7 +6,7 @@
   <!-- Jerry pointing down into the input field -->
   <div class="hero-jerry-avatar">
     <img
-      src="/assets/images/backgrounds/jerry_pointing.png"
+      src="/assets/images/backgrounds/jerry_pointing.webp"
       alt="Jerry pointing"
       loading="eager"
     />
@@ -21,7 +21,7 @@
           id="heroNameInput"
           name="name"
           class="hero-name-input"
-          placeholder="Име"
+          placeholder="Твоето Име"
           autocomplete="off"
           required
         />
@@ -42,35 +42,19 @@
     </div>
   </form>
 
-  <!-- Success state greeting (clean without hearts) -->
+  <!-- Success state greeting (clean and centered) -->
   <div id="heroSuccessCard" class="hero-name-success">
-    <div class="d-flex flex-column gap-3 text-center align-items-center">
-      <div class="text-center">
-        <h4 class="mb-1 text-dark fw-bold" id="heroGreetingTitle">
-          Здравей, Дария!
-        </h4>
-        <p class="mb-0 fs-4 text-muted" id="heroGreetingSubtitle">
-          Твоята покана те очаква!
-        </p>
-      </div>
+    <div
+      class="d-flex flex-column gap-4 text-center align-items-center justify-content-center py-2"
+    >
+      <h3 class="mb-0 text-dark fw-bold fs-7" id="heroGreetingTitle">
+        Здравей, Дария!
+      </h3>
 
-      <div
-        class="d-flex align-items-center gap-2 mt-2 w-100 justify-content-center"
-      >
-        <a
-          href="#plans"
-          class="btn btn-dark text-white rounded-pill px-4 py-2 fs-4 fw-semibold"
-        >
+      <div class="w-100 d-flex justify-content-center">
+        <a href="/invite" id="heroSeeInviteBtn" class="hero-see-invite-btn">
           Виж поканата
         </a>
-        <button
-          type="button"
-          id="heroResetBtn"
-          class="btn btn-outline-secondary rounded-pill px-3 py-2 fs-4"
-          title="Смени име"
-        >
-          Смени име
-        </button>
       </div>
     </div>
   </div>
@@ -87,7 +71,7 @@
 
   .hero-jerry-avatar {
     position: absolute;
-    top: -150px;
+    top: -135px;
     left: 50%;
     transform: translateX(-50%);
     width: 195px;
@@ -221,16 +205,40 @@
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border-radius: 16px;
-    padding: 20px 22px;
+    border-radius: 20px;
+    padding: 24px 28px;
     box-shadow: 0 20px 42px -4px rgba(0, 0, 0, 0.45);
     border: 2px solid #22c55e;
     animation: mat-subscript-enter 0.3s ease-out;
   }
 
-  .round-44 {
-    width: 44px;
-    height: 44px;
+  .hero-see-invite-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #141414 !important;
+    color: #ffffff !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    padding: 12px 36px !important;
+    border-radius: 50px !important;
+    text-decoration: none !important;
+    border: 2px solid #141414 !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+
+  .hero-see-invite-btn:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .hero-see-invite-btn:active {
+    transform: scale(0.96);
   }
 
   @keyframes shake {
@@ -335,6 +343,10 @@
       const formatted =
         nameVal.trim().charAt(0).toUpperCase() + nameVal.trim().slice(1);
       greetingTitle.textContent = "Здравей, " + formatted + "!";
+      const inviteBtn = document.getElementById("heroSeeInviteBtn");
+      if (inviteBtn) {
+        inviteBtn.href = "/invite?to=" + encodeURIComponent(formatted);
+      }
       form.style.display = "none";
       successCard.style.display = "block";
     }

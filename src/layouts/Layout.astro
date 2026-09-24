@@ -1,7 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import ScrollToTop from '../components/ScrollToTop.astro';
+import VisitorTracker from '../components/VisitorTracker.astro';
 
 interface Props {
   title?: string;
@@ -38,12 +38,12 @@ const {
 
     {showFooter && <Footer />}
 
-    <ScrollToTop />
-
     <script is:inline src="/assets/libs/jquery/dist/jquery.min.js"></script>
     <script is:inline src="/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script is:inline src="/assets/libs/owl.carousel/dist/owl.carousel.min.js"></script>
     <script is:inline src="/assets/js/custom.js"></script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+
+    <VisitorTracker />
   </body>
 </html>

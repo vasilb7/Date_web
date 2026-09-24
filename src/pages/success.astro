@@ -1,0 +1,194 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title="Прекрасно! - JMB"
+  activePage="success"
+  showHeader={false}
+  showFooter={false}
+>
+  <div
+    class="success-page-wrapper position-relative min-vh-100 d-flex align-items-center justify-content-center overflow-hidden"
+    style="background: #000000 url('/assets/images/backgrounds/banner.webp') center center / cover no-repeat;"
+  >
+    <video
+      id="successBannerVideo"
+      class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      poster="/assets/images/backgrounds/banner.webp"
+      style="z-index: 0; pointer-events: none;"
+    >
+      <source
+        src="/assets/images/backgrounds/banner-video.mp4"
+        type="video/mp4"
+      />
+    </video>
+
+    <!-- Subtle dark backdrop for high readability -->
+    <div
+      class="position-absolute top-0 start-0 w-100 h-100"
+      style="background: rgba(0, 0, 0, 0.45); z-index: 1;"
+    >
+    </div>
+
+    <!-- Main Fullscreen Centered Container -->
+    <div
+      class="container position-relative z-2 px-3 py-4 d-flex justify-content-center"
+    >
+      <!-- Dedicated Success Box without checkmark -->
+      <div
+        class="success-box card border-0 rounded-4 text-center p-4 p-sm-5 bg-white"
+      >
+        <!-- Heartbeat GIF in box -->
+        <div class="heartbeat-wrapper mx-auto mb-3">
+          <img
+            src="/assets/images/backgrounds/heartbeat.gif"
+            alt="Heartbeat"
+            class="heartbeat-img"
+            loading="eager"
+          />
+        </div>
+
+        <h1
+          class="text-dark fw-bolder mb-2 fs-3 fs-sm-2 lh-sm"
+          id="successHeading"
+        >
+          Прекрасно!
+        </h1>
+
+        <p class="text-dark fs-5 fw-semibold mb-2" id="successDecisionText">
+          Твоето решение е винаги важно за мен.
+        </p>
+
+        <p class="text-dark fs-6 mb-4" id="successCallText">
+          Ще ти се обадя възможно<br />най-скоро!
+        </p>
+
+        <div class="d-flex justify-content-center">
+          <a
+            href="/"
+            class="btn btn-dark rounded-pill px-5 py-2-5 fs-6 fw-bold shadow-sm"
+          >
+            Обратно в началото
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<!-- Confetti library -->
+<script
+  is:inline
+  src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
+></script>
+
+<style>
+  .success-box {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px !important;
+    border: none !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35) !important;
+    animation: success-box-enter 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .heartbeat-wrapper {
+    width: 100%;
+    max-width: 200px;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  }
+
+  .heartbeat-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  @keyframes success-box-enter {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Background video autoplay fallback
+    const video = document.getElementById("successBannerVideo");
+    if (video) {
+      video.muted = true;
+      const promise = video.play();
+      if (promise !== undefined) {
+        promise.catch(function () {
+          const playOnTouch = function () {
+            video.play();
+            document.removeEventListener("click", playOnTouch);
+            document.removeEventListener("touchstart", playOnTouch);
+          };
+          document.addEventListener("click", playOnTouch, { once: true });
+          document.addEventListener("touchstart", playOnTouch, {
+            once: true,
+          });
+        });
+      }
+    }
+
+    // Name personalization (?to=Дария or ?name=...)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const toName = (params.get("to") || params.get("name") || "").trim();
+      const headingEl = document.getElementById("successHeading");
+      if (toName) {
+        const formatted = toName.charAt(0).toUpperCase() + toName.slice(1);
+        if (headingEl) {
+          headingEl.textContent = "Прекрасно, " + formatted + "!";
+        }
+      }
+    } catch (e) {
+      // Ignore URL parse error
+    }
+
+    // Celebratory confetti on success page load
+    if (typeof confetti === "function") {
+      confetti({
+        particleCount: 110,
+        spread: 75,
+        origin: { y: 0.6 },
+        zIndex: 99999,
+      });
+      setTimeout(() => {
+        confetti({
+          particleCount: 60,
+          angle: 60,
+          spread: 60,
+          origin: { x: 0, y: 0.65 },
+          zIndex: 99999,
+        });
+        confetti({
+          particleCount: 60,
+          angle: 120,
+          spread: 60,
+          origin: { x: 1, y: 0.65 },
+          zIndex: 99999,
+        });
+      }, 250);
+    }
+  });
+</script>

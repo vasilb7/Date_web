@@ -300,6 +300,11 @@
         "дарийка",
         "дариика",
         "дариа",
+        "дарийче",
+        "дарина",
+        "даринка",
+        "даринче",
+        "даринчи",
         "daria",
         "dariya",
         "darya",
@@ -309,10 +314,16 @@
         "dariika",
         "dariah",
         "darriah",
+        "darina",
+        "darinka",
+        "darinche",
+        "darinchi",
+        "daryna",
+        "darin",
       ]);
       if (validSet.has(clean)) return true;
-      if (/^дар(и|ия|я|ийка|иика|иа)$/i.test(clean)) return true;
-      if (/^dar(i|ia|iya|ya|yia|iq|ika|iika|iah)$/i.test(clean)) return true;
+      if (/^дар(и|ия|я|ийка|иика|иа|ийче|ина|инка|инче|инчи)$/i.test(clean)) return true;
+      if (/^dar(i|ia|iya|ya|yia|iq|ika|iika|iah|ina|inka|inche|inchi|yna|in)$/i.test(clean)) return true;
       return false;
     }
 

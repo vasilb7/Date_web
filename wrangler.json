@@ -9,8 +9,6 @@
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "PUBLIC_SUPABASE_URL": "https://fbkjzteyzebyigrvmbps.supabase.co",
-    "PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZia2p6dGV5emVieWlncnZtYnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODkxMTYsImV4cCI6MjEwNTc2NTExNn0.qH5AHUZAbvPDraJqyR1H8MyunMVgEaYsDk9krNBsXoU",
-    "TELEGRAM_BOT_TOKEN": "8638109260:AAHvL68HYUgzVAEbFpo_nOFJ2O4I5mk2y8o",
-    "TELEGRAM_CHAT_ID": "-1003974171920"
+    "PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZia2p6dGV5emVieWlncnZtYnBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxODkxMTYsImV4cCI6MjEwNTc2NTExNn0.qH5AHUZAbvPDraJqyR1H8MyunMVgEaYsDk9krNBsXoU"
   }
 }

@@ -3,12 +3,12 @@ export const getTelegramConfig = () => {
   const token =
     envProcess?.env?.TELEGRAM_BOT_TOKEN ||
     import.meta.env.TELEGRAM_BOT_TOKEN ||
-    "8638109260:AAHvL68HYUgzVAEbFpo_nOFJ2O4I5mk2y8o";
+    "";
 
   const chatId =
     envProcess?.env?.TELEGRAM_CHAT_ID ||
     import.meta.env.TELEGRAM_CHAT_ID ||
-    "-1003974171920";
+    "";
 
   return { token, chatId };
 };

@@ -12,7 +12,8 @@ yarn-error.log*
 
 # environment variables
 .env
-.env.production
+.env.*
+.dev.vars
 
 # system files
 .DS_Store
